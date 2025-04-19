@@ -1,0 +1,50 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+*.local
+
+# Vite cache
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+
+# TypeScript
+*.tsbuildinfo
+
+# macOS files
+*.DS_Store
+
+
+# local dev SSL certs 
+*.pem
+
+# VS Code settings 
+.vscode/*
+
+# Local output
+*.log
+*.sqlite
+*.sqlite-journal
+
+# Others (vite-plugin-inspect, vite-plugin-pwa, etc.)
+.vite-inspect/
+coverage/
