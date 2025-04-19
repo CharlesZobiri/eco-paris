@@ -27,13 +27,13 @@ function goToHome() {
       <div class="flex text-xl text-center gap-4 text-white">
         <button
           @click="goToHome"
-          class="flex gap-2 justify-center items-center text-center bg-green-500 rounded-lg w-56"
+          class="flex gap-2 justify-center items-center text-center bg-green-500 rounded-lg min-w-56"
         >
           <Wind />Page Accueil
         </button>
         <button
           @click="goToApi"
-          class="flex gap-2 justify-center items-center text-center bg-green-800 rounded-lg w-56"
+          class="flex gap-2 justify-center items-center text-center bg-green-800 rounded-lg min-w-56"
         >
           <HardDriveDownload />Page Api
         </button>

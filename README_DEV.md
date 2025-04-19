@@ -82,6 +82,7 @@
 4. style : changement de style
 5. refactor : refactorisation du code
 6. test : ajout de tests
+7. init : initialisation du projet
 
 ### La gestion des commits :
 
@@ -95,3 +96,4 @@
 4. style : changement de style
 5. refactor : refactorisation du code
 6. test : ajout de tests
+7. init : initialisation du projet
