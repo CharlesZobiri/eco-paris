@@ -67,3 +67,22 @@
     <Camera color="red" :size="32" />
   </template>
   ```
+
+## 5. Concernant Git et les commits :
+
+### La gestion des branches :
+
+- On crée une branche pour chaque fonctionnalité : `git checkout -b feat/nom-de-la-branche`
+
+### La gestion des commits :
+
+- On utilise la convention de commit : `feat: description du commit`
+
+- En fontction du type de commit :
+
+1. feat : nouvelle fonctionnalité
+2. fix : correction de bug
+3. docs : documentation
+4. style : changement de style
+5. refactor : refactorisation du code
+6. test : ajout de tests
