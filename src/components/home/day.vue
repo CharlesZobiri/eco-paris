@@ -5,13 +5,18 @@
                 <h1 class="font-bold text-3xl text-black">Qualité de l'air à Paris</h1>
             </div>
             <div class="flex flex-col items-center justify-end">
+<<<<<<< HEAD
                 <p class="text-center text-xl">{{ currentDate }}</p>
+=======
+                <p class="text-center">Le vendredi 24 avril</p>
+>>>>>>> 537be42 (feat: front page dashboard)
                 <p class="font-bold text-2xl">3° Arrondissement</p>
             </div>
         </div>
     </div>
 </template>
 
+<<<<<<< HEAD
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
@@ -26,4 +31,10 @@ onMounted(() => {
         day: 'numeric',
     })
 })
+=======
+<script lang="ts">
+export default {
+    name: "Day"
+}
+>>>>>>> 537be42 (feat: front page dashboard)
 </script>
