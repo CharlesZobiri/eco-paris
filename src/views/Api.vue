@@ -11,7 +11,7 @@ function goToLanding() {
 }
 
 const airQualityData = ref<any>(null);
-const inseeCode = "75117";
+const inseeCode = "75120";
 
 const airQualityIndices = computed(() => {
   if (!airQualityData.value || !airQualityData.value[inseeCode]) return null;
