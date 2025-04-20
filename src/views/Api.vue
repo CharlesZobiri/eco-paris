@@ -55,6 +55,8 @@ watch(searchQuery, fetchAirQualityData);
         v-model="searchQuery"
         placeholder="Chercher un arrondissement..."
         class="pl-10"
+        maxlength="5"
+        pattern="\d{5}"
       />
       <span
         class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -85,6 +87,6 @@ watch(searchQuery, fetchAirQualityData);
         </div>
       </div>
     </div>
-    <p v-else class="text-gray-600">Chargement des données en cours...</p>
+    <p v-else class="text-gray-600">En attente des données...</p>
   </section>
 </template>
