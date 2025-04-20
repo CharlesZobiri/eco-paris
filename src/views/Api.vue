@@ -5,6 +5,7 @@ import { useRouter } from "vue-router";
 import { getAirQualityByCommune } from "@/services/airparif";
 import { onMounted, ref, computed, watch } from "vue";
 import { Input } from "@/components/ui/input";
+import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
 
 const router = useRouter();
 function goToLanding() {
@@ -12,17 +13,24 @@ function goToLanding() {
 }
 
 const airQualityData = ref<any>(null);
-const searchQuery = ref<string>("75110");
+const searchQuery = ref<string>("");
+const fallbackInsee = "75115";
+
+const activeInsee = computed(() =>
+  searchQuery.value && /^\d{5}$/.test(searchQuery.value)
+    ? searchQuery.value
+    : fallbackInsee
+);
 
 const airQualityIndices = computed(() => {
-  if (!airQualityData.value || !airQualityData.value[searchQuery.value])
+  if (!airQualityData.value || !airQualityData.value[activeInsee.value])
     return null;
-  return airQualityData.value[searchQuery.value];
+  return airQualityData.value[activeInsee.value];
 });
 
 const fetchAirQualityData = async () => {
   try {
-    airQualityData.value = await getAirQualityByCommune(searchQuery.value);
+    airQualityData.value = await getAirQualityByCommune(activeInsee.value);
     console.log("Données reçues:", airQualityData.value);
   } catch (error) {
     console.error("Erreur dans le composant:", error);
@@ -39,11 +47,11 @@ watch(searchQuery, fetchAirQualityData);
   >
     <div class="flex w-full justify-between items-center">
       <h1 class="text-3xl font-bold text-green-700">
-        Qualité de l'air de Paris {{ searchQuery }}
+        Qualité de l'air de Paris {{ activeInsee }}
       </h1>
       <button
         @click="goToLanding"
-        class="flex gap-2 items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+        class="flex gap-2 justify-center text-center items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition min-w-56"
       >
         <House /> Accueil
       </button>
@@ -53,40 +61,18 @@ watch(searchQuery, fetchAirQualityData);
         id="search"
         type="text"
         v-model="searchQuery"
-        placeholder="Chercher un arrondissement..."
-        class="pl-10"
+        placeholder="Code INSEE (ex: 75115)"
+        class="pl-10 pr-4 py-2 bg-white border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-green-700 transition"
         maxlength="5"
         pattern="\d{5}"
       />
       <span
-        class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+        class="absolute left-2 inset-y-0 flex items-center justify-center text-green-500"
       >
-        <Search class="size-6 text-muted-foreground" />
+        <Search class="size-6" />
       </span>
     </div>
-    <div
-      v-if="airQualityIndices"
-      class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl"
-    >
-      <div
-        v-for="(dayData, index) in airQualityIndices"
-        :key="index"
-        class="bg-white rounded-xl p-4 shadow-lg border border-green-200"
-      >
-        <h2 class="text-xl font-semibold text-green-600">
-          {{ index === 0 ? "Aujourd'hui" : "Demain" }}
-        </h2>
-        <p><strong>Date :</strong> {{ dayData.date }}</p>
-        <div class="mt-2">
-          <h3 class="font-medium text-green-600">Polluants :</h3>
-          <p><strong>NO2 :</strong> {{ dayData.no2 }}</p>
-          <p><strong>O3 :</strong> {{ dayData.o3 }}</p>
-          <p v-if="dayData.pm10"><strong>PM10 :</strong> {{ dayData.pm10 }}</p>
-          <p v-if="dayData.pm25"><strong>PM2.5 :</strong> {{ dayData.pm25 }}</p>
-          <p v-if="dayData.so2"><strong>SO2 :</strong> {{ dayData.so2 }}</p>
-        </div>
-      </div>
-    </div>
+    <AirQualityDisplay v-if="airQualityIndices" :data="airQualityIndices" />
     <p v-else class="text-gray-600">En attente des données...</p>
   </section>
 </template>
