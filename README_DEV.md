@@ -88,7 +88,7 @@
 
 - On utilise la convention de commit : `feat: description du commit`
 
-- En fontction du type de commit :
+- En fonction du type de commit :
 
 1. feat : nouvelle fonctionnalité
 2. fix : correction de bug
