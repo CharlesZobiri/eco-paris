@@ -195,3 +195,7 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+.backgroundColorPage {
+  background-color: #1E1E1E;
+}

@@ -1,41 +1,60 @@
-<script setup lang="ts">
-import "@/style.css";
-import { House, ArrowLeftRight } from "lucide-vue-next";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
-
-function goToLanding() {
-  router.push("/");
-}
-function goToCompare() {
-  router.push("/compare");
-}
-</script>
-
 <template>
-  <section
-    class="flex flex-col gap-8 text-center items-center justify-center h-screen bg-pink-200"
-  >
-    <h1 class="text-3xl font-bold text-green-500">
-      Page D'accueil <br />de l'application Eco-Paris
-    </h1>
-    <div class="flex text-xl text-center gap-4 text-white">
-      <button
-        @click="goToLanding"
-        class="flex gap-2 justify-center items-center text-center bg-green-500 rounded-lg min-w-56"
-      >
-        <House class="" />Page de lancement
-      </button>
+  <div class="flex flex-col items-center justify-start h-screen mx-2 bg-black rounded-xl overflow-hidden">
 
-      <button
-        @click="goToCompare"
-        class="flex gap-2 justify-center items-center text-center bg-green-800 rounded-lg min-w-56"
-      >
-        <ArrowLeftRight class="" />Page de comparaison
-      </button>
+    <Navbar />
+    <Day />
+
+    <!-- Partie haute : carte + BestDay -->
+    <div class="flex flex-row w-[95%] h-[60%] backgroundColorPage space-x-2">
+      <div class="w-[60%] h-full flex justify-center items-center">
+        <div class="w-[95%] h-[95%] elevation-0 rounded-0 border-none">
+          <MapParis />
+        </div>
+      </div>
+      <div class="w-[40%] h-full">
+        <BestDay />
+      </div>
     </div>
-  </section>
+
+    <!-- Partie basse : graphiques -->
+    <div class="flex flex-row w-[95%] h-[30%] backgroundColorPage space-x-2 rounded-b-xl">
+      <div class="w-[60%] h-full">
+        <ChartLine />
+      </div>
+      <div class="w-[40%] h-full">
+        <ChartBar />
+      </div>
+    </div>
+  </div>
 </template>
 
-<style></style>
+<script lang="ts">
+import Navbar from "../components/home/navbar.vue";
+import Day from "../components/home/day.vue";
+import MapParis from "../components/home/map.vue";
+import BestDay from "../components/home/bestDay.vue";
+import ChartLine from "../components/home/ChartLine.vue";
+import ChartBar from "../components/home/ChartBar.vue";
+
+export default {
+  name: "Dashboard",
+  components: {
+    Navbar,
+    Day,
+    MapParis,
+    BestDay,
+    ChartLine,
+    ChartBar,
+  },
+};
+</script>
+
+<style scoped>
+.background {
+  background-color: #1e1e1e;
+}
+
+.backgroundColorPage {
+  background-color: #2a2a2a;
+}
+</style>
