@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import "@/style.css";
-import { House } from "lucide-vue-next";
+import { House, Search } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { getAirQualityByCommune } from "@/services/airparif";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
+import { Input } from "@/components/ui/input";
 
 const router = useRouter();
 function goToLanding() {
@@ -11,21 +12,25 @@ function goToLanding() {
 }
 
 const airQualityData = ref<any>(null);
-const inseeCode = "75120";
+const searchQuery = ref<string>("75110");
 
 const airQualityIndices = computed(() => {
-  if (!airQualityData.value || !airQualityData.value[inseeCode]) return null;
-  return airQualityData.value[inseeCode];
+  if (!airQualityData.value || !airQualityData.value[searchQuery.value])
+    return null;
+  return airQualityData.value[searchQuery.value];
 });
 
-onMounted(async () => {
+const fetchAirQualityData = async () => {
   try {
-    airQualityData.value = await getAirQualityByCommune(inseeCode);
+    airQualityData.value = await getAirQualityByCommune(searchQuery.value);
     console.log("Données reçues:", airQualityData.value);
   } catch (error) {
     console.error("Erreur dans le composant:", error);
   }
-});
+};
+
+onMounted(fetchAirQualityData);
+watch(searchQuery, fetchAirQualityData);
 </script>
 
 <template>
@@ -34,7 +39,7 @@ onMounted(async () => {
   >
     <div class="flex w-full justify-between items-center">
       <h1 class="text-3xl font-bold text-green-700">
-        Qualité de l'air de Paris {{ inseeCode }}
+        Qualité de l'air de Paris {{ searchQuery }}
       </h1>
       <button
         @click="goToLanding"
@@ -42,6 +47,20 @@ onMounted(async () => {
       >
         <House /> Accueil
       </button>
+    </div>
+    <div class="relative w-full max-w-sm items-center">
+      <Input
+        id="search"
+        type="text"
+        v-model="searchQuery"
+        placeholder="Chercher un arrondissement..."
+        class="pl-10"
+      />
+      <span
+        class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+      >
+        <Search class="size-6 text-muted-foreground" />
+      </span>
     </div>
     <div
       v-if="airQualityIndices"
