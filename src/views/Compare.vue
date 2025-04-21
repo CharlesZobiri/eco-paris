@@ -91,7 +91,7 @@ function goToLanding() {
           </label>
           <Select v-model="firstArrondissement">
             <SelectTrigger
-              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg focus:ring-3 focus:ring-green-300"
+              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
@@ -122,7 +122,7 @@ function goToLanding() {
           </label>
           <Select v-model="secondArrondissement">
             <SelectTrigger
-              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg focus:ring-3 focus:ring-green-300"
+              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
