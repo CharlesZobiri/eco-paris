@@ -35,7 +35,6 @@ const fetchAirQualityData = async () => {
       getAirQualityByCommune(firstArrondissement.value),
       getAirQualityByCommune(secondArrondissement.value),
     ]);
-
     firstArrondissementData.value = first[firstArrondissement.value];
     secondArrondissementData.value = second[secondArrondissement.value];
   } catch (error) {
@@ -67,6 +66,7 @@ function goToLanding() {
         <Wind /> Accueil
       </button>
     </header>
+
     <div
       class="w-full max-w-4xl bg-white rounded-2xl p-8 shadow-xl border border-green-300"
     >
