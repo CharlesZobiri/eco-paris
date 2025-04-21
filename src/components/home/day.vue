@@ -5,15 +5,25 @@
                 <h1 class="font-bold text-3xl text-black">Qualité de l'air à Paris</h1>
             </div>
             <div class="flex flex-col items-center justify-end">
-                <p class="text-center">Le vendredi 24 avril</p>
+                <p class="text-center text-xl">{{ currentDate }}</p>
                 <p class="font-bold text-2xl">3° Arrondissement</p>
             </div>
         </div>
     </div>
 </template>
 
-<script lang="ts">
-export default {
-    name: "Day"
-}
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+
+const currentDate = ref('')
+
+onMounted(() => {
+    const today = new Date()
+    currentDate.value = today.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    })
+})
 </script>

@@ -20,7 +20,7 @@
             data: {
               labels: ['Jan', 'Feb', 'Mar', 'Apr'],
               datasets: [{
-                label: 'Votes',
+                label: 'Indice de pollution journalier',
                 data: [12, 19, 3, 5],
                 borderWidth: 2,
                 borderColor: '#3b82f6',
