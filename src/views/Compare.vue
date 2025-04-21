@@ -14,6 +14,12 @@ import {
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
 
+const swapArrondissements = () => {
+  const temp = firstArrondissement.value;
+  firstArrondissement.value = secondArrondissement.value;
+  secondArrondissement.value = temp;
+};
+
 const router = useRouter();
 function goToLanding() {
   router.push("/Home");
@@ -70,6 +76,7 @@ function goToLanding() {
         </div>
 
         <button
+          @click="swapArrondissements"
           class="flex justify-center items-center p-6 rounded-full bg-green-100 hover:bg-green-300 text-green-700 shadow-lg"
           title="Inverser les arrondissements"
         >
