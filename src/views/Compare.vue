@@ -5,6 +5,7 @@ import { ArrowLeftRight, Wind } from "lucide-vue-next";
 import { arrondissements } from "@/data/arrondissements";
 import { getAirQualityByCommune } from "@/services/airparif";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
+import Loader from "@/components/Loader.vue";
 import {
   Select,
   SelectContent,
@@ -17,6 +18,7 @@ const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
 const firstArrondissementData = ref<any>(null);
 const secondArrondissementData = ref<any>(null);
+const isLoading = ref(false);
 
 const getArrondissementName = (insee: string): string => {
   const arr = arrondissements.find((a) => a.insee === insee);
@@ -30,6 +32,7 @@ const swapArrondissements = () => {
 };
 
 const fetchAirQualityData = async () => {
+  isLoading.value = true;
   try {
     const [first, second] = await Promise.all([
       getAirQualityByCommune(firstArrondissement.value),
@@ -39,6 +42,8 @@ const fetchAirQualityData = async () => {
     secondArrondissementData.value = second[secondArrondissement.value];
   } catch (error) {
     console.error("Erreur lors de la récupération des données:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -67,7 +72,10 @@ function goToLanding() {
       </button>
     </header>
 
+    <Loader :isLoading="isLoading" />
+
     <div
+      v-if="!isLoading"
       class="w-full max-w-4xl bg-white rounded-2xl p-8 shadow-xl border border-green-300"
     >
       <h2 class="text-3xl font-bold text-green-800 mb-8 text-center">
