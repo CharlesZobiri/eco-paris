@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { ArrowLeftRight, Wind } from "lucide-vue-next";
 import { arrondissements } from "@/data/arrondissements";
+import { getAirQualityByCommune } from "@/services/airparif";
+import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
 import {
   Select,
   SelectContent,
@@ -13,12 +15,36 @@ import {
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
+const firstArrondissementData = ref<any>(null);
+const secondArrondissementData = ref<any>(null);
+
+const getArrondissementName = (insee: string): string => {
+  const arr = arrondissements.find((a) => a.insee === insee);
+  return arr ? arr.name : insee;
+};
 
 const swapArrondissements = () => {
   const temp = firstArrondissement.value;
   firstArrondissement.value = secondArrondissement.value;
   secondArrondissement.value = temp;
 };
+
+const fetchAirQualityData = async () => {
+  try {
+    const [first, second] = await Promise.all([
+      getAirQualityByCommune(firstArrondissement.value),
+      getAirQualityByCommune(secondArrondissement.value),
+    ]);
+
+    firstArrondissementData.value = first[firstArrondissement.value];
+    secondArrondissementData.value = second[secondArrondissement.value];
+  } catch (error) {
+    console.error("Erreur lors de la récupération des données:", error);
+  }
+};
+
+watch([firstArrondissement, secondArrondissement], fetchAirQualityData);
+onMounted(fetchAirQualityData);
 
 const router = useRouter();
 function goToLanding() {
@@ -41,14 +67,12 @@ function goToLanding() {
         <Wind /> Accueil
       </button>
     </header>
-
     <div
       class="w-full max-w-4xl bg-white rounded-2xl p-8 shadow-xl border border-green-300"
     >
       <h2 class="text-3xl font-bold text-green-800 mb-8 text-center">
         Sélectionnez deux arrondissements à comparer
       </h2>
-
       <div class="flex flex-row items-center gap-10">
         <div class="w-2/5">
           <label
@@ -65,16 +89,15 @@ function goToLanding() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem
-                v-for="arr in arrondissements"
-                :key="arr.insee"
-                :value="arr.insee"
+                v-for="arrondissement in arrondissements"
+                :key="arrondissement.insee"
+                :value="arrondissement.insee"
               >
-                {{ arr.name }}
+                {{ arrondissement.name }}
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
-
         <button
           @click="swapArrondissements"
           class="flex justify-center items-center p-6 rounded-full bg-green-100 hover:bg-green-300 text-green-700 shadow-lg"
@@ -82,7 +105,6 @@ function goToLanding() {
         >
           <ArrowLeftRight class="h-8 w-8" />
         </button>
-
         <div class="w-2/5">
           <label
             for="second-arrondissement"
@@ -98,15 +120,43 @@ function goToLanding() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem
-                v-for="arr in arrondissements"
-                :key="arr.insee"
-                :value="arr.insee"
+                v-for="arrondissement in arrondissements"
+                :key="arrondissement.insee"
+                :value="arrondissement.insee"
               >
-                {{ arr.name }}
+                {{ arrondissement.name }}
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
+      <div class="space-y-8">
+        <h2
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+        >
+          {{ getArrondissementName(firstArrondissement) }}
+        </h2>
+        <AirQualityDisplay
+          v-if="firstArrondissementData"
+          :data="firstArrondissementData"
+        />
+        <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
+      </div>
+
+      <div class="space-y-8">
+        <h2
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+        >
+          {{ getArrondissementName(secondArrondissement) }}
+        </h2>
+        <AirQualityDisplay
+          v-if="secondArrondissementData"
+          :data="secondArrondissementData"
+        />
+        <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
     </div>
   </section>
