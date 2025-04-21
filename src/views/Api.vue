@@ -72,7 +72,11 @@ watch(searchQuery, fetchAirQualityData);
         <Search class="size-6" />
       </span>
     </div>
-    <AirQualityDisplay v-if="airQualityIndices" :data="airQualityIndices" />
+    <AirQualityDisplay
+      v-if="airQualityIndices"
+      :data="airQualityIndices"
+      class="max-w-1/2"
+    />
     <p v-else class="text-gray-600">En attente des données...</p>
   </section>
 </template>
