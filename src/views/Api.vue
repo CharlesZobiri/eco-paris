@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import "@/style.css";
-import { House, Search } from "lucide-vue-next";
+import { House } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { getAirQualityByCommune } from "@/services/airparif";
 import { onMounted, ref, computed, watch } from "vue";
-import { Input } from "@/components/ui/input";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
+import Loader from "@/components/Loader.vue"; // Importer le composant Loader
+import { arrondissements } from "@/data/arrondissements";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const isLoading = ref(false);
 
 const router = useRouter();
 function goToLanding() {
@@ -29,11 +39,14 @@ const airQualityIndices = computed(() => {
 });
 
 const fetchAirQualityData = async () => {
+  isLoading.value = true;
   try {
     airQualityData.value = await getAirQualityByCommune(activeInsee.value);
     console.log("Données reçues:", airQualityData.value);
   } catch (error) {
     console.error("Erreur dans le composant:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -56,21 +69,27 @@ watch(searchQuery, fetchAirQualityData);
         <House /> Accueil
       </button>
     </div>
+
+    <Loader :isLoading="isLoading" />
+    <!-- Ajouter le composant Loader ici -->
+
     <div class="relative w-full max-w-sm items-center">
-      <Input
-        id="search"
-        type="text"
-        v-model="searchQuery"
-        placeholder="Code INSEE (ex: 75115)"
-        class="pl-10 pr-4 py-2 bg-white border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-green-700 transition"
-        maxlength="5"
-        pattern="\d{5}"
-      />
-      <span
-        class="absolute left-2 inset-y-0 flex items-center justify-center text-green-500"
-      >
-        <Search class="size-6" />
-      </span>
+      <Select v-model="searchQuery">
+        <SelectTrigger
+          class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
+        >
+          <SelectValue placeholder="Sélectionnez un arrondissement" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem
+            v-for="arrondissement in arrondissements"
+            :key="arrondissement.insee"
+            :value="arrondissement.insee"
+          >
+            {{ arrondissement.name }}
+          </SelectItem>
+        </SelectContent>
+      </Select>
     </div>
     <AirQualityDisplay
       v-if="airQualityIndices"
