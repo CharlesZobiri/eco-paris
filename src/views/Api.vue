@@ -70,9 +70,6 @@ watch(searchQuery, fetchAirQualityData);
       </button>
     </div>
 
-    <Loader :isLoading="isLoading" />
-    <!-- Ajouter le composant Loader ici -->
-
     <div class="relative w-full max-w-sm items-center">
       <Select v-model="searchQuery">
         <SelectTrigger
@@ -91,11 +88,11 @@ watch(searchQuery, fetchAirQualityData);
         </SelectContent>
       </Select>
     </div>
+    <Loader :isLoading="isLoading" />
     <AirQualityDisplay
       v-if="airQualityIndices"
       :data="airQualityIndices"
       class="max-w-1/2"
     />
-    <p v-else class="text-gray-600">En attente des données...</p>
   </section>
 </template>
