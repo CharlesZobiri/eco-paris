@@ -1,14 +1,13 @@
 <template>
   <div class="flex flex-col items-center justify-start h-screen mx-2 bg-black rounded-xl overflow-hidden">
-
     <Navbar />
-    <Day />
+    <Day :selectedArrondissement="selectedArrondissement" />
 
     <!-- Partie haute : carte + BestDay -->
     <div class="flex flex-row w-[95%] h-[60%] backgroundColorPage space-x-2">
       <div class="w-[60%] h-full flex justify-center items-center">
         <div class="w-[95%] h-[95%] elevation-0 rounded-0 border-none">
-          <MapParis />
+          <MapParis @arrondissement-selected="selectedArrondissement = $event" />
         </div>
       </div>
       <div class="w-[40%] h-full">
@@ -28,7 +27,8 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { ref } from 'vue'
 import Navbar from "../components/home/navbar.vue";
 import Day from "../components/home/day.vue";
 import MapParis from "../components/home/map.vue";
@@ -36,17 +36,7 @@ import BestDay from "../components/home/bestDay.vue";
 import ChartLine from "../components/home/ChartLine.vue";
 import ChartBar from "../components/home/ChartBar.vue";
 
-export default {
-  name: "Dashboard",
-  components: {
-    Navbar,
-    Day,
-    MapParis,
-    BestDay,
-    ChartLine,
-    ChartBar,
-  },
-};
+const selectedArrondissement = ref('1° Arrondissement');
 </script>
 
 <style scoped>
