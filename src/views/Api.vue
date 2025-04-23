@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { isBefore1130 } from "@/utils/isBefore1130";
 
 const isLoading = ref(false);
 
@@ -49,6 +50,8 @@ const fetchAirQualityData = async () => {
     isLoading.value = false;
   }
 };
+
+const showTomorrowDataInfo = computed(() => isBefore1130());
 
 onMounted(fetchAirQualityData);
 watch(searchQuery, fetchAirQualityData);
@@ -88,6 +91,15 @@ watch(searchQuery, fetchAirQualityData);
         </SelectContent>
       </Select>
     </div>
+
+    <div
+      v-if="showTomorrowDataInfo"
+      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
+    >
+      ℹ️ Les données pour le lendemain ne sont disponibles qu’à partir de
+      <strong>11h30</strong>.
+    </div>
+
     <Loader :isLoading="isLoading" />
     <AirQualityDisplay
       v-if="airQualityIndices"

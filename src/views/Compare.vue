@@ -13,6 +13,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { computed } from "vue";
+import { isBefore1130 } from "@/utils/isBefore1130";
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
@@ -51,6 +53,8 @@ const fetchAirQualityData = async () => {
   }
 };
 
+const showTomorrowDataInfo = computed(() => isBefore1130());
+
 watch([firstArrondissement, secondArrondissement], fetchAirQualityData);
 onMounted(fetchAirQualityData);
 
@@ -62,9 +66,9 @@ function goToLanding() {
 
 <template>
   <section
-    class="flex flex-col items-center gap-12 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
+    class="flex flex-col items-center gap-8 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
   >
-    <header class="flex w-full justify-between items-center mb-8">
+    <header class="flex w-full justify-between items-center">
       <h1 class="text-3xl font-bold text-green-500">
         Comparaison de la qualité de l'air
       </h1>
@@ -144,10 +148,18 @@ function goToLanding() {
       </div>
     </div>
 
+    <div
+      v-if="showTomorrowDataInfo"
+      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center max-w-1/5"
+    >
+      ℹ️ Les données pour le lendemain ne sont disponibles qu’à partir de
+      <strong>11h30</strong>.
+    </div>
+
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
       <div class="space-y-8">
         <h2
-          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
         >
           {{ getArrondissementName(firstArrondissement) }}
         </h2>
@@ -162,7 +174,7 @@ function goToLanding() {
 
       <div class="space-y-8">
         <h2
-          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
         >
           {{ getArrondissementName(secondArrondissement) }}
         </h2>
