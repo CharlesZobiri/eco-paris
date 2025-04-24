@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Calendar, Wind, Droplet, CloudFog, Leaf } from "lucide-vue-next";
+import { LMap, LTileLayer, LMarker, LPopup } from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css";
 
 defineProps<{ data: any }>();
 
@@ -85,6 +87,33 @@ const getEmojiForIndice = (indice: string): string => {
           <strong>SO2 :</strong> <span class="ml-2">{{ dayData.so2 }}</span>
         </p>
       </div>
+
+      <!-- Carte Leaflet pour chaque jour avec style amélioré -->
+      <div class="mt-6 rounded-xl overflow-hidden shadow-lg border border-gray-200" style="height: 250px;">
+        <LMap :center="[dayData.lat || 48.8566, dayData.lng || 2.3522]" :zoom="13" style="height: 100%;">
+          <LTileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          <LMarker :lat-lng="[dayData.lat || 48.8566, dayData.lng || 2.3522]">
+            <LPopup>
+              <span>{{ dayData.location || "Localisation non définie" }}</span>
+            </LPopup>
+          </LMarker>
+        </LMap>
+      </div>
+
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Styles généraux pour la carte */
+.leaflet-container {
+  border-radius: 16px; /* Bords arrondis pour la carte */
+}
+
+.leaflet-tile {
+  border-radius: 16px !important; /* Assurer que les tuiles ont des bords arrondis */
+}
+
+</style>
