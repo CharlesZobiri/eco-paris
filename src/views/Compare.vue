@@ -25,6 +25,11 @@ const getArrondissementName = (insee: string): string => {
   return arr ? arr.name : insee;
 };
 
+const getArrondissementCoordinates = (insee: string): [number, number] | null => {
+  const arr = arrondissements.find((a) => a.insee === insee);
+  return arr ? [arr.lat, arr.lng] : null;
+};
+
 const swapArrondissements = () => {
   const temp = firstArrondissement.value;
   firstArrondissement.value = secondArrondissement.value;
@@ -150,6 +155,7 @@ function goToLanding() {
         <AirQualityDisplay
           v-if="firstArrondissementData"
           :data="firstArrondissementData"
+          :center="getArrondissementCoordinates(firstArrondissement)"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
@@ -163,6 +169,7 @@ function goToLanding() {
         <AirQualityDisplay
           v-if="secondArrondissementData"
           :data="secondArrondissementData"
+          :center="getArrondissementCoordinates(secondArrondissement)"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
