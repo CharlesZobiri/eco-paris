@@ -156,6 +156,7 @@ function goToLanding() {
           v-if="firstArrondissementData"
           :data="firstArrondissementData"
           :center="getArrondissementCoordinates(firstArrondissement)"
+          :selectedArrondissement="getArrondissementName(firstArrondissement)"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
@@ -170,6 +171,7 @@ function goToLanding() {
           v-if="secondArrondissementData"
           :data="secondArrondissementData"
           :center="getArrondissementCoordinates(secondArrondissement)"
+          :selectedArrondissement="getArrondissementName(secondArrondissement)"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>

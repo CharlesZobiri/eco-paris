@@ -3,7 +3,6 @@
     <Navbar />
     <Day :selectedArrondissement="selectedArrondissement" />
 
-    <!-- Partie haute : carte + BestDay -->
     <div class="flex flex-row w-[95%] h-[60%] backgroundColorPage space-x-2">
       <div class="w-[60%] h-full flex justify-center items-center">
         <div class="w-[95%] h-[95%] elevation-0 rounded-0 border-none">
@@ -15,7 +14,6 @@
       </div>
     </div>
 
-    <!-- Partie basse : graphiques -->
     <div class="flex flex-row w-[95%] h-[30%] backgroundColorPage space-x-2 rounded-b-xl">
       <div class="w-[60%] h-full">
         <ChartLine />
