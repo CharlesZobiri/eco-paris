@@ -1,7 +1,16 @@
 <script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
 import { Calendar, Wind, Droplet, CloudFog, Leaf } from "lucide-vue-next";
+import { LMap, LTileLayer, LGeoJson } from "@vue-leaflet/vue-leaflet";
+import "leaflet/dist/leaflet.css";
+import { arrondissements } from '@/data/arrondMap';
+import type { Feature, FeatureCollection } from 'geojson';
 
-defineProps<{ data: any }>();
+const props = defineProps<{ data: any; center?: [number, number]; selectedArrondissement?: string }>();
+
+const geojson = ref<FeatureCollection | undefined>(undefined);
+const zoom = ref<number>(13);
+const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 const getEmojiForIndice = (indice: string): string => {
   switch (indice) {
@@ -19,6 +28,49 @@ const getEmojiForIndice = (indice: string): string => {
       return "❓";
   }
 };
+
+const options = {
+  style: function (feature: Feature) {
+    return {
+      fillColor: feature.properties?.color || 'blue',
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      fillOpacity: 0.7,
+    };
+  },
+};
+
+const fetchGeoJson = async () => {
+  try {
+    const response = await fetch('/arrondissements.geojson');
+    const data = await response.json();
+    geojson.value = data;
+    filterGeoJsonForSelectedArrondissement();
+  } catch (error) {
+    console.error('Erreur lors de la récupération du GeoJSON:', error);
+  }
+};
+
+const filterGeoJsonForSelectedArrondissement = () => {
+  if (!geojson.value || !props.selectedArrondissement) return;
+
+  const selectedFeature = geojson.value.features.find(feature => {
+    const c_ar = feature.properties?.c_ar;
+    const match = arrondissements.find(a => a.c_ar === c_ar && a.name === props.selectedArrondissement);
+    return match !== undefined;
+  });
+
+  if (selectedFeature) {
+    geojson.value = {
+      type: 'FeatureCollection',
+      features: [selectedFeature]
+    };
+  }
+};
+
+onMounted(fetchGeoJson);
+watch(() => props.selectedArrondissement, filterGeoJsonForSelectedArrondissement);
 </script>
 
 <template>
@@ -85,6 +137,24 @@ const getEmojiForIndice = (indice: string): string => {
           <strong>SO2 :</strong> <span class="ml-2">{{ dayData.so2 }}</span>
         </p>
       </div>
+
+      <div class="mt-6 rounded-xl overflow-hidden shadow-lg border border-gray-200" style="height: 250px;">
+        <LMap :center="center || [dayData.lat || 48.8566, dayData.lng || 2.3522]" :zoom="zoom" style="height: 100%;">
+          <LTileLayer :url="url" />
+          <LGeoJson v-if="geojson" :geojson="geojson" :options="options" />
+        </LMap>
+      </div>
+
     </div>
   </div>
 </template>
+
+<style scoped>
+.leaflet-container {
+  border-radius: 16px; 
+}
+
+.leaflet-tile {
+  border-radius: 16px !important; 
+}
+</style>

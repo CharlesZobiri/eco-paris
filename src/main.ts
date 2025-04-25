@@ -3,6 +3,8 @@ import "./style.css";
 import App from "./App.vue";
 import router from "@/router/router.ts";
 
+document.documentElement.classList.add('dark');
+
 const app = createApp(App);
 app.use(router);
 app.mount("#app");
