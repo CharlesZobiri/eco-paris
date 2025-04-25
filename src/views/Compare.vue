@@ -29,7 +29,6 @@ const getArrondissementCoordinates = (insee: string): [number, number] | null =>
   const arr = arrondissements.find((a) => a.insee === insee);
   return arr ? [arr.lat, arr.lng] : null;
 };
-
 const swapArrondissements = () => {
   const temp = firstArrondissement.value;
   firstArrondissement.value = secondArrondissement.value;
