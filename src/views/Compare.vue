@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import { ArrowLeftRight, Wind } from "lucide-vue-next";
 import { arrondissements } from "@/data/arrondissements";
@@ -13,14 +13,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { computed } from "vue";
-import { isBefore1130 } from "@/utils/isBefore1130";
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
-const firstArrondissementData = ref<any>(null);
-const secondArrondissementData = ref<any>(null);
+const firstArrondissementData = ref<any[]>([]);
+const secondArrondissementData = ref<any[]>([]);
 const isLoading = ref(false);
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+const tomorrowKey = tomorrow.toISOString().split("T")[0];
 
 const getArrondissementName = (insee: string): string => {
   const arr = arrondissements.find((a) => a.insee === insee);
@@ -53,7 +56,23 @@ const fetchAirQualityData = async () => {
   }
 };
 
-const showTomorrowDataInfo = computed(() => isBefore1130());
+const isTomorrowDataMissing = computed(() => {
+  const hasTomorrowData = (data: any[]) => {
+    if (!data || !Array.isArray(data)) return false;
+
+    const found = data.some((item) => item.date === tomorrowKey);
+
+    console.log("🔍 Données trouvées pour", tomorrowKey, ":", found);
+    return found;
+  };
+
+  const result =
+    !hasTomorrowData(firstArrondissementData.value) ||
+    !hasTomorrowData(secondArrondissementData.value);
+
+  console.log("🚨 Affichage du message 'pas de données' ?", result);
+  return result;
+});
 
 watch([firstArrondissement, secondArrondissement], fetchAirQualityData);
 onMounted(fetchAirQualityData);
@@ -149,11 +168,11 @@ function goToLanding() {
     </div>
 
     <div
-      v-if="showTomorrowDataInfo"
-      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center max-w-1/5"
+      v-if="!isLoading && isTomorrowDataMissing"
+      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
     >
-      ℹ️ Les données pour le lendemain ne sont disponibles qu’à partir de
-      <strong>11h30</strong>.
+      ℹ️ Les prévisions pour le <strong>lendemain</strong> ne sont pas encore
+      disponibles.
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
