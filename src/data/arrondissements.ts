@@ -26,5 +26,4 @@ export const arrondissements: Arrondissement[] = [
   { insee: "75118", name: "18e arrondissement", lat: 48.8886, lng: 2.3425 },
   { insee: "75119", name: "19e arrondissement", lat: 48.8809, lng: 2.3813 },
   { insee: "75120", name: "20e arrondissement", lat: 48.8649, lng: 2.3986 },
-}
 ];
