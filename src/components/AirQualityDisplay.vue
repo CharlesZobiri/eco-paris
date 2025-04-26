@@ -8,7 +8,8 @@ import type { Feature, FeatureCollection } from 'geojson';
 
 const props = defineProps<{ data: any; center?: [number, number]; selectedArrondissement?: string }>();
 
-const geojson = ref<FeatureCollection | undefined>(undefined);
+const originalGeojson = ref<FeatureCollection | undefined>(undefined); 
+const filteredGeojson = ref<FeatureCollection | undefined>(undefined);
 const zoom = ref<number>(13);
 const url = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -45,7 +46,7 @@ const fetchGeoJson = async () => {
   try {
     const response = await fetch('/arrondissements.geojson');
     const data = await response.json();
-    geojson.value = data;
+    originalGeojson.value = data;
     filterGeoJsonForSelectedArrondissement();
   } catch (error) {
     console.error('Erreur lors de la récupération du GeoJSON:', error);
@@ -53,19 +54,24 @@ const fetchGeoJson = async () => {
 };
 
 const filterGeoJsonForSelectedArrondissement = () => {
-  if (!geojson.value || !props.selectedArrondissement) return;
+  if (!originalGeojson.value || !props.selectedArrondissement) {
+    filteredGeojson.value = undefined;
+    return;
+  }
 
-  const selectedFeature = geojson.value.features.find(feature => {
+  const selectedFeature = originalGeojson.value.features.find(feature => {
     const c_ar = feature.properties?.c_ar;
     const match = arrondissements.find(a => a.c_ar === c_ar && a.name === props.selectedArrondissement);
     return match !== undefined;
   });
 
   if (selectedFeature) {
-    geojson.value = {
+    filteredGeojson.value = {
       type: 'FeatureCollection',
       features: [selectedFeature]
     };
+  } else {
+    filteredGeojson.value = undefined;
   }
 };
 
@@ -104,7 +110,7 @@ watch(() => props.selectedArrondissement, filterGeoJsonForSelectedArrondissement
             ),
           }"
         >
-          <strong class="text-gray-700">Qualité de l’air : </strong>
+          <strong class="text-gray-700">Qualité de l’air :</strong>
           <strong class="ml-2">{{ dayData.indice }}</strong>
         </span>
         <span class="text-2xl ml-2" aria-hidden="true">
@@ -141,7 +147,7 @@ watch(() => props.selectedArrondissement, filterGeoJsonForSelectedArrondissement
       <div class="mt-6 rounded-xl overflow-hidden shadow-lg border border-gray-200" style="height: 250px;">
         <LMap :center="center || [dayData.lat || 48.8566, dayData.lng || 2.3522]" :zoom="zoom" style="height: 100%;">
           <LTileLayer :url="url" />
-          <LGeoJson v-if="geojson" :geojson="geojson" :options="options" />
+          <LGeoJson v-if="filteredGeojson" :geojson="filteredGeojson" :options="options" />
         </LMap>
       </div>
 
