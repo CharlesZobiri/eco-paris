@@ -30,9 +30,11 @@ const getArrondissementName = (insee: string): string => {
   return arr ? arr.name : insee;
 };
 
-const getArrondissementCoordinates = (insee: string): [number, number] | null => {
+const getArrondissementCoordinates = (
+  insee: string
+): [number, number] | undefined => {
   const arr = arrondissements.find((a) => a.insee === insee);
-  return arr ? [arr.lat, arr.lng] : null;
+  return arr ? [arr.lat, arr.lng] : undefined;
 };
 const swapArrondissements = () => {
   const temp = firstArrondissement.value;
@@ -80,7 +82,7 @@ function goToLanding() {
 
 <template>
   <section
-    class="flex flex-col items-center gap-8 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
+    class="relative flex flex-col items-center gap-8 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
   >
     <header class="flex w-full justify-between items-center">
       <h1 class="text-3xl font-bold text-green-500">
@@ -117,7 +119,7 @@ function goToLanding() {
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent class="z-[1050]">
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
@@ -144,11 +146,11 @@ function goToLanding() {
           </label>
           <Select v-model="secondArrondissement">
             <SelectTrigger
-              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
+              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300 bg-transparent z-index-10"
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent class="z-[1050]">
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
