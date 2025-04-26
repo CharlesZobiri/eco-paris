@@ -5,7 +5,7 @@
           <h1 class="font-bold text-3xl text-black">Qualité de l'air à Paris</h1>
         </div>
         <div class="flex flex-col items-center justify-end">
-          <p class="text-center text-xl">{{ currentDate }}</p>
+          <componentDay />
           <p class="font-bold text-2xl">{{ selectedArrondissement }}</p>
         </div>
       </div>
@@ -13,20 +13,7 @@
   </template>
   
   <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
-  
+import componentDay from './componentDay.vue'  
   defineProps<{ selectedArrondissement: string }>()
-  
-  const currentDate = ref('')
-  
-  onMounted(() => {
-    const today = new Date()
-    currentDate.value = today.toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  })
   </script>
   
