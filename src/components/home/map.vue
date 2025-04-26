@@ -25,7 +25,7 @@ import { ref, onMounted } from 'vue';
 import { LMap, LTileLayer, LGeoJson, LMarker } from '@vue-leaflet/vue-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { arrondissements } from '@/data/arrondMap';
+import { arrondissements } from '@/data/arrondissements';
 import type { Feature, FeatureCollection } from 'geojson';
 
 const emit = defineEmits(['arrondissement-selected']);

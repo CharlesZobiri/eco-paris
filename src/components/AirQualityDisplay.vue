@@ -3,7 +3,7 @@ import { ref, onMounted, watch } from 'vue';
 import { Calendar, Wind, Droplet, CloudFog, Leaf } from "lucide-vue-next";
 import { LMap, LTileLayer, LGeoJson } from "@vue-leaflet/vue-leaflet";
 import "leaflet/dist/leaflet.css";
-import { arrondissements } from '@/data/arrondMap';
+import { arrondissements } from '@/data/arrondissements';
 import type { Feature, FeatureCollection } from 'geojson';
 
 const props = defineProps<{ data: any; center?: [number, number]; selectedArrondissement?: string }>();
