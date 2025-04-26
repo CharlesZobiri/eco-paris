@@ -59,18 +59,13 @@ const fetchAirQualityData = async () => {
 const isTomorrowDataMissing = computed(() => {
   const hasTomorrowData = (data: any[]) => {
     if (!data || !Array.isArray(data)) return false;
-
     const found = data.some((item) => item.date === tomorrowKey);
-
-    console.log("🔍 Données trouvées pour", tomorrowKey, ":", found);
     return found;
   };
 
   const result =
     !hasTomorrowData(firstArrondissementData.value) ||
     !hasTomorrowData(secondArrondissementData.value);
-
-  console.log("🚨 Affichage du message 'pas de données' ?", result);
   return result;
 });
 
