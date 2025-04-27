@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import "@/style.css";
-import { LayoutDashboard, HardDriveDownload } from "lucide-vue-next";
+import { LayoutDashboard, ArrowLeftRight } from "lucide-vue-next";
 import LandingCard from "@/components/LandingCard.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 
-function goToApi() {
-  router.push("/api");
+function goToCompare() {
+  router.push("/compare");
 }
 function goToHome() {
   router.push("/home");
@@ -33,10 +33,10 @@ function goToHome() {
           <LayoutDashboard />Tableau de bord
         </button>
         <button
-          @click="goToApi"
+          @click="goToCompare"
           class="flex gap-2 justify-center items-center text-center bg-green-800 min-w-56"
         >
-          <HardDriveDownload />Page Api
+          <ArrowLeftRight />Comparer
         </button>
       </div>
 

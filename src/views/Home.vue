@@ -57,7 +57,7 @@
             getArrondissementName(selectedArrondissement)
           "
         />
-        <h2 class="pt-4 text-3xl text-green-500">
+        <h2 class="pt-4 text-3xl font-semibold text-green-800">
           Le Top des arrondissements indiquants<br />
           la meilleure qualité de l'air
         </h2>
@@ -86,8 +86,6 @@ import { ArrowLeftRight, House } from "lucide-vue-next";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
 const selectedArrondissement = ref("1° Arrondissement");
 import ChartBar from "@/components/home/ChartBar.vue";
-import ChartLine from "@/components/home/ChartLine.vue";
-
 import { getAirQualityByCommune } from "@/services/airparif";
 import { onMounted, computed, watch } from "vue";
 import Loader from "@/components/Loader.vue";
