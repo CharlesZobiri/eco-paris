@@ -22,7 +22,7 @@ const navigate = (path: string) => {
 
 <template>
   <div
-    class="flex justify-between w-full px-6 py-6 border-b-2"
+    class="flex justify-between w-full px-6 py-4 border-b-2"
     :class="titleColor ?? 'bg-green-100'"
   >
     <header

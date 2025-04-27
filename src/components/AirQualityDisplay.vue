@@ -11,6 +11,7 @@ const props = defineProps<{
   center?: [number, number];
   selectedArrondissement?: string;
   showMap?: boolean;
+  showTomorrow?: boolean;
 }>();
 
 const originalGeojson = ref<FeatureCollection | undefined>(undefined);
@@ -92,14 +93,16 @@ watch(
 <template>
   <div class="grid grid-cols-1 gap-6 w-full">
     <div
-      v-for="(dayData, index) in data"
+      v-for="(dayData, index) in data.filter(
+        (_: any, i: number) => i === 0 || (props.showTomorrow && i === 1)
+      )"
       :key="index"
       class="flex bg-white rounded-2xl p-4 shadow-xl border-2 border-green-200 transition hover:scale-[1.02] hover:shadow-2xl gap-6 px-6"
     >
       <section class="flex flex-col min-w-1/3">
         <h2 class="text-2xl font-bold text-green-700 flex items-center mb-2">
           <Calendar class="mr-3 h-7 w-7 text-green-600" />
-          {{ index === 0 ? "Aujourd'hui" : "Demain" }}
+          {{ index === 0 ? "Aujourd'hui" : props.showTomorrow ? "Demain" : "" }}
         </h2>
 
         <p class="flex items-center text-gray-700 mb-1 text-lg">
