@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as icons from "lucide-vue-next";
-import { computed, defineProps } from "vue";
+import { computed } from "vue";
 
 const props = defineProps<{
   name: string;

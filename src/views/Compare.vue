@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, computed } from "vue";
-import { useRouter } from "vue-router";
-import { ArrowLeftRight, Wind } from "lucide-vue-next";
+import { ArrowLeftRight, LayoutDashboard } from "lucide-vue-next";
 import { arrondissements } from "@/data/arrondissements";
 import { getAirQualityByCommune } from "@/services/airparif";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
@@ -13,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Navbar from "@/components/home/Navbar.vue";
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
@@ -73,28 +73,24 @@ const isTomorrowDataMissing = computed(() => {
 
 watch([firstArrondissement, secondArrondissement], fetchAirQualityData);
 onMounted(fetchAirQualityData);
-
-const router = useRouter();
-function goToLanding() {
-  router.push("/Home");
-}
 </script>
 
 <template>
   <section
-    class="relative flex flex-col items-center gap-8 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
+    class="relative flex flex-col items-center gap-8 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
   >
-    <header class="flex w-full justify-between items-center">
-      <h1 class="text-3xl font-bold text-green-500">
-        Comparaison de la qualité de l'air
-      </h1>
-      <button
-        @click="goToLanding"
-        class="flex gap-2 justify-center text-center items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 min-w-56"
-      >
-        <Wind /> Accueil
-      </button>
-    </header>
+    <Navbar
+      logoSrc="/leaf.svg"
+      title="Eco-Paris - Comparateur"
+      :buttons="[
+        {
+          label: 'Tableau de bord',
+          icon: LayoutDashboard,
+          color: 'bg-green-500',
+          to: '/home',
+        },
+      ]"
+    />
 
     <Loader :isLoading="isLoading" />
 
@@ -119,11 +115,14 @@ function goToLanding() {
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent class="z-[1050]">
+            <SelectContent
+              class="z-[1050] bg-white text-black border-green-500"
+            >
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
                 :value="arrondissement.insee"
+                class="hover:bg-green-100 focus:bg-green-100"
               >
                 {{ arrondissement.name }}
               </SelectItem>
@@ -146,15 +145,18 @@ function goToLanding() {
           </label>
           <Select v-model="secondArrondissement">
             <SelectTrigger
-              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300 bg-transparent z-index-10"
+              class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent class="z-[1050]">
+            <SelectContent
+              class="z-[1050] bg-white text-black border-green-500"
+            >
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
                 :value="arrondissement.insee"
+                class="hover:bg-green-100 focus:bg-green-100"
               >
                 {{ arrondissement.name }}
               </SelectItem>
@@ -172,7 +174,7 @@ function goToLanding() {
       disponibles.
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full px-8 pb-4">
       <div class="space-y-8">
         <h2
           class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
