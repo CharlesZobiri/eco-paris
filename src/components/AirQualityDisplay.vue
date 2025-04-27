@@ -97,7 +97,7 @@ watch(
         (_: any, i: number) => i === 0 || (props.showTomorrow && i === 1)
       )"
       :key="index"
-      class="flex bg-white rounded-2xl p-4 shadow-xl border-2 border-green-200 transition hover:scale-[1.02] hover:shadow-2xl gap-6 px-6"
+      class="flex bg-white rounded-2xl p-4 shadow-sm border-2 border-green-200 transition hover:scale-[1.02] hover:shadow-xl gap-6 px-6"
     >
       <section class="flex flex-col min-w-1/3">
         <h2 class="text-2xl font-bold text-green-700 flex items-center mb-2">
