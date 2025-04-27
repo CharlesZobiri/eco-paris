@@ -1,46 +1,48 @@
-<template>
-    <div class="flex flex-row justify-between card-container w-[95%] rounded-t-xl shadow-sm">
-        <div class="flex flex-row ml-7">
-            <img src="../../../public/leaf.svg" alt="Logo" class="w-8" />
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+import type { FunctionalComponent } from "vue";
 
-        </div>
-        <div class="flex flex-row gap-7 items-center justify-between">
-            <button class="text-md text-white" @click="goToHome">Dashboard</button>
-            <button class="text-md text-white" @click="goToCompare">Comparaison</button>
-        </div>
-    </div>
-</template>
+defineProps<{
+  title: string;
+  titleColor?: string;
+  logoSrc: string;
+  buttons: {
+    label: string;
+    icon: FunctionalComponent;
+    color: string;
+    to: string;
+  }[];
+}>();
 
-<script lang="ts">
-import { useRouter } from 'vue-router';
-
-export default {
-    name: "Navbar",
-    setup() {
-        const router = useRouter();
-
-        const goToCompare = () => {
-            router.push("/compare");
-        };
-
-        const goToHome = () => {
-            router.push("/home");
-        };
-
-        return {
-            goToCompare,
-            goToHome
-        };
-    }
-}
+const router = useRouter();
+const navigate = (path: string) => {
+  router.push(path);
+};
 </script>
 
-<style scoped>
-.card-container {
-    background-color: #1E1E1E;
-    padding: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+<template>
+  <div
+    class="flex justify-between w-full px-6 py-4 border-b-2"
+    :class="titleColor ?? 'bg-green-100'"
+  >
+    <header
+      class="flex items-center gap-2 font-bold text-2xl"
+      :class="titleColor ? '' : 'text-green-800'"
+    >
+      <img :src="logoSrc" alt="Logo" class="w-12" />
+      {{ title }}
+    </header>
 
-
-</style>
+    <div class="flex gap-7 items-center justify-between text-white">
+      <button
+        v-for="(button, index) in buttons"
+        :key="index"
+        @click="navigate(button.to)"
+        class="flex gap-2 justify-center items-center text-center min-w-56 py-2 rounded-md"
+        :class="button.color"
+      >
+        <component :is="button.icon" />{{ button.label }}
+      </button>
+    </div>
+  </div>
+</template>

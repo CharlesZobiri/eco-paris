@@ -1,19 +1,16 @@
+<script setup lang="ts">
+import componentDay from "./componentDay.vue";
+defineProps<{ selectedArrondissement: string }>();
+</script>
+
 <template>
-    <div class="w-[95%] p-4 elevation-0 rounded-0 border-none bg-gradient-to-r from-white via-white/25 to-[#1E1E1E]">
-      <div class="flex flex-row justify-between mx-6">
-        <div class="flex items-center justify-center">
-          <h1 class="font-bold text-3xl text-black">Qualité de l'air à Paris</h1>
-        </div>
-        <div class="flex flex-col items-center justify-end">
-          <componentDay />
-          <p class="font-bold text-2xl">{{ selectedArrondissement }}</p>
-        </div>
-      </div>
+  <div class="flex items-center justify-between px-6 py-2 bg-green-300">
+    <h1 class="text-md font-bold text-green-500">Qualité de l'air à Paris</h1>
+    <div class="flex flex-col items-end">
+      <componentDay />
+      <p class="mt-2 text-lg font-semibold text-green-800">
+        {{ selectedArrondissement }}
+      </p>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-import componentDay from './componentDay.vue'  
-  defineProps<{ selectedArrondissement: string }>()
-  </script>
-  
+  </div>
+</template>

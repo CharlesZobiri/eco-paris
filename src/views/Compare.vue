@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
-import { useRouter } from "vue-router";
-import { ArrowLeftRight, Wind } from "lucide-vue-next";
+import { onMounted, ref, watch, computed } from "vue";
+import { ArrowLeftRight, LayoutDashboard } from "lucide-vue-next";
 import { arrondissements } from "@/data/arrondissements";
 import { getAirQualityByCommune } from "@/services/airparif";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
@@ -13,21 +12,29 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Navbar from "@/components/home/Navbar.vue";
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
-const firstArrondissementData = ref<any>(null);
-const secondArrondissementData = ref<any>(null);
+const firstArrondissementData = ref<any[]>([]);
+const secondArrondissementData = ref<any[]>([]);
 const isLoading = ref(false);
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+const tomorrowKey = tomorrow.toISOString().split("T")[0];
 
 const getArrondissementName = (insee: string): string => {
   const arr = arrondissements.find((a) => a.insee === insee);
   return arr ? arr.name : insee;
 };
 
-const getArrondissementCoordinates = (insee: string): [number, number] | null => {
+const getArrondissementCoordinates = (
+  insee: string
+): [number, number] | undefined => {
   const arr = arrondissements.find((a) => a.insee === insee);
-  return arr ? [arr.lat, arr.lng] : null;
+  return arr ? [arr.lat, arr.lng] : undefined;
 };
 const swapArrondissements = () => {
   const temp = firstArrondissement.value;
@@ -51,30 +58,39 @@ const fetchAirQualityData = async () => {
   }
 };
 
+const isTomorrowDataMissing = computed(() => {
+  const hasTomorrowData = (data: any[]) => {
+    if (!data || !Array.isArray(data)) return false;
+    const found = data.some((item) => item.date === tomorrowKey);
+    return found;
+  };
+
+  const result =
+    !hasTomorrowData(firstArrondissementData.value) ||
+    !hasTomorrowData(secondArrondissementData.value);
+  return result;
+});
+
 watch([firstArrondissement, secondArrondissement], fetchAirQualityData);
 onMounted(fetchAirQualityData);
-
-const router = useRouter();
-function goToLanding() {
-  router.push("/Home");
-}
 </script>
 
 <template>
   <section
-    class="flex flex-col items-center gap-12 p-12 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
+    class="relative flex flex-col items-center gap-8 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
   >
-    <header class="flex w-full justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-green-500">
-        Comparaison de la qualité de l'air
-      </h1>
-      <button
-        @click="goToLanding"
-        class="flex gap-2 justify-center text-center items-center bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 min-w-56"
-      >
-        <Wind /> Accueil
-      </button>
-    </header>
+    <Navbar
+      logoSrc="/leaf.svg"
+      title="Eco-Paris - Comparateur"
+      :buttons="[
+        {
+          label: 'Tableau de bord',
+          icon: LayoutDashboard,
+          color: 'bg-green-500',
+          to: '/home',
+        },
+      ]"
+    />
 
     <Loader :isLoading="isLoading" />
 
@@ -99,11 +115,14 @@ function goToLanding() {
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent
+              class="z-[1050] bg-white text-black border-green-500"
+            >
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
                 :value="arrondissement.insee"
+                class="hover:bg-green-100 focus:bg-green-100"
               >
                 {{ arrondissement.name }}
               </SelectItem>
@@ -130,11 +149,14 @@ function goToLanding() {
             >
               <SelectValue placeholder="Sélectionnez un arrondissement" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent
+              class="z-[1050] bg-white text-black border-green-500"
+            >
               <SelectItem
                 v-for="arrondissement in arrondissements"
                 :key="arrondissement.insee"
                 :value="arrondissement.insee"
+                class="hover:bg-green-100 focus:bg-green-100"
               >
                 {{ arrondissement.name }}
               </SelectItem>
@@ -144,10 +166,18 @@ function goToLanding() {
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full">
+    <div
+      v-if="!isLoading && isTomorrowDataMissing"
+      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
+    >
+      ℹ️ Les prévisions pour le <strong>lendemain</strong> ne sont pas encore
+      disponibles.
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full px-8 pb-4">
       <div class="space-y-8">
         <h2
-          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
         >
           {{ getArrondissementName(firstArrondissement) }}
         </h2>
@@ -156,13 +186,15 @@ function goToLanding() {
           :data="firstArrondissementData"
           :center="getArrondissementCoordinates(firstArrondissement)"
           :selectedArrondissement="getArrondissementName(firstArrondissement)"
+          :show-map="true"
+          :show-tomorrow="true"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
 
       <div class="space-y-8">
         <h2
-          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl"
+          class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
         >
           {{ getArrondissementName(secondArrondissement) }}
         </h2>
@@ -171,6 +203,8 @@ function goToLanding() {
           :data="secondArrondissementData"
           :center="getArrondissementCoordinates(secondArrondissement)"
           :selectedArrondissement="getArrondissementName(secondArrondissement)"
+          :show-map="true"
+          :show-tomorrow="true"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>

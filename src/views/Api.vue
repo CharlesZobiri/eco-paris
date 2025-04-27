@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import "@/style.css";
-import { House, Search } from "lucide-vue-next";
+import { House } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 import { getAirQualityByCommune } from "@/services/airparif";
 import { onMounted, ref, computed, watch } from "vue";
-import { Input } from "@/components/ui/input";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
+import Loader from "@/components/Loader.vue";
+import { arrondissements } from "@/data/arrondissements";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const isLoading = ref(false);
 
 const router = useRouter();
 function goToLanding() {
@@ -28,12 +38,28 @@ const airQualityIndices = computed(() => {
   return airQualityData.value[activeInsee.value];
 });
 
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+const tomorrowKey = tomorrow.toISOString().split("T")[0]; // format "YYYY-MM-DD"
+
+const isTomorrowDataMissing = computed(() => {
+  const hasTomorrowData = (data: any[]) => {
+    if (!data || !Array.isArray(data)) return false;
+    return data.some((item) => item.date === tomorrowKey);
+  };
+  return !hasTomorrowData(airQualityIndices.value);
+});
+
 const fetchAirQualityData = async () => {
+  isLoading.value = true;
   try {
     airQualityData.value = await getAirQualityByCommune(activeInsee.value);
     console.log("Données reçues:", airQualityData.value);
   } catch (error) {
     console.error("Erreur dans le composant:", error);
+  } finally {
+    isLoading.value = false;
   }
 };
 
@@ -56,27 +82,39 @@ watch(searchQuery, fetchAirQualityData);
         <House /> Accueil
       </button>
     </div>
-    <div class="relative w-full max-w-sm items-center">
-      <Input
-        id="search"
-        type="text"
-        v-model="searchQuery"
-        placeholder="Code INSEE (ex: 75115)"
-        class="pl-10 pr-4 py-2 bg-white border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 text-green-700 transition"
-        maxlength="5"
-        pattern="\d{5}"
-      />
-      <span
-        class="absolute left-2 inset-y-0 flex items-center justify-center text-green-500"
-      >
-        <Search class="size-6" />
-      </span>
+
+    <div
+      v-if="isTomorrowDataMissing && !isLoading"
+      class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
+    >
+      ℹ️ Les prévisions pour le <strong>lendemain</strong> ne sont pas encore
+      disponibles.
     </div>
+
+    <div class="relative w-full max-w-sm items-center">
+      <Select v-model="searchQuery">
+        <SelectTrigger
+          class="w-full border-2 justify-center text-center items-center border-green-300 rounded-2xl p-3 text-lg ring-2 ring-green-300"
+        >
+          <SelectValue placeholder="Sélectionnez un arrondissement" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem
+            v-for="arrondissement in arrondissements"
+            :key="arrondissement.insee"
+            :value="arrondissement.insee"
+          >
+            {{ arrondissement.name }}
+          </SelectItem>
+        </SelectContent>
+      </Select>
+    </div>
+
+    <Loader :isLoading="isLoading" />
     <AirQualityDisplay
       v-if="airQualityIndices"
       :data="airQualityIndices"
       class="max-w-1/2"
     />
-    <p v-else class="text-gray-600">En attente des données...</p>
   </section>
 </template>
