@@ -5,7 +5,7 @@ import { useRouter } from "vue-router";
 import { getAirQualityByCommune } from "@/services/airparif";
 import { onMounted, ref, computed, watch } from "vue";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
-import Loader from "@/components/Loader.vue"; // Importer le composant Loader
+import Loader from "@/components/Loader.vue";
 import { arrondissements } from "@/data/arrondissements";
 import {
   Select,

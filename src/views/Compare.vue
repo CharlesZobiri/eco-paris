@@ -186,6 +186,7 @@ onMounted(fetchAirQualityData);
           :data="firstArrondissementData"
           :center="getArrondissementCoordinates(firstArrondissement)"
           :selectedArrondissement="getArrondissementName(firstArrondissement)"
+          :show-map="true"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
@@ -201,6 +202,7 @@ onMounted(fetchAirQualityData);
           :data="secondArrondissementData"
           :center="getArrondissementCoordinates(secondArrondissement)"
           :selectedArrondissement="getArrondissementName(secondArrondissement)"
+          :show-map="true"
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>

@@ -10,6 +10,7 @@ const props = defineProps<{
   data: any;
   center?: [number, number];
   selectedArrondissement?: string;
+  showMap?: boolean;
 }>();
 
 const originalGeojson = ref<FeatureCollection | undefined>(undefined);
@@ -156,7 +157,7 @@ watch(
         </div>
       </section>
 
-      <section class="w-full">
+      <section v-if="showMap" class="w-full">
         <div
           class="mt-6 rounded-xl overflow-hidden border border-green-500"
           style="height: 250px"
