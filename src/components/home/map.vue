@@ -39,6 +39,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["arrondissement-selected"]);
 
+const map = ref<any>(null);
 const geojson = ref<FeatureCollection | undefined>(undefined);
 const zoom = ref<number>(12);
 const center = ref<[number, number]>(props.center);
@@ -100,7 +101,7 @@ onMounted(() => {
           const lats = coords.map((c) => c[1]);
           const lngs = coords.map((c) => c[0]);
           const centerLat = lats.reduce((a, b) => a + b, 0) / lats.length;
-          const centerLng = lngs.reduce((a, b) => a + b, 0) / lngs.length;
+          const centerLng = lngs.reduce((a, b) => a + b, 0) / lats.length;
 
           return {
             latlng: [centerLat, centerLng] as [number, number],
@@ -112,10 +113,18 @@ onMounted(() => {
     .catch((error) => console.error("Erreur lors de la récupération du GeoJSON:", error));
 });
 
+// ⚡️ FlyTo avec animation quand on change de center
 watch(
   () => props.center,
   (newCenter) => {
-    center.value = newCenter;
+    if (map.value?.leafletObject) {
+      map.value.leafletObject.flyTo(newCenter, zoom.value, {
+        animate: true,
+        duration: 1.5,
+      });
+    } else {
+      center.value = newCenter;
+    }
   }
 );
 </script>
