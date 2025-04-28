@@ -1,6 +1,6 @@
 <template>
   <footer
-    class="w-full bg-green-100 py-4 px-4 text-center text-sm text-gray-700 mt-8 border-t-2"
+    class="w-full bg-green-100 py-4 px-4 text-center text-sm text-gray-700 border-t-2"
   >
     <p class="max-w-2xl mx-auto">
       Les données affichées sur cette application sont des

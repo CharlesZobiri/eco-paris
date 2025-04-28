@@ -1,27 +1,23 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import Navbar from "../components/home/navbar.vue";
 import Day from "../components/home/day.vue";
 import MapParis from "../components/home/map.vue";
 import { ArrowLeftRight, House } from "lucide-vue-next";
 import AirQualityDisplay from "@/components/AirQualityDisplay.vue";
-const selectedArrondissement = ref("1° Arrondissement");
 import ChartBar from "@/components/home/ChartBar.vue";
 import { getAirQualityByCommune } from "@/services/airparif";
-import { onMounted, computed, watch } from "vue";
 import Loader from "@/components/Loader.vue";
 import { arrondissements } from "@/data/arrondissements";
 import EcoFacts from "@/components/EcoFacts.vue";
 import Footer from "@/components/home/Footer.vue";
 
+const selectedArrondissement = ref("1er arrondissement");
 const isLoading = ref(false);
-
 const airQualityData = ref<any>(null);
 const activeInsee = ref("75101");
 
-const getArrondissementCoordinates = (
-  insee: string
-): [number, number] | undefined => {
+const getArrondissementCoordinates = (insee: string): [number, number] | undefined => {
   const arr = arrondissements.find((a) => a.insee === insee);
   return arr ? [arr.lat, arr.lng] : undefined;
 };
@@ -49,9 +45,7 @@ watch(activeInsee, fetchAirQualityData);
 
 const onArrondissementSelected = (arrondissementName: string) => {
   selectedArrondissement.value = arrondissementName;
-  const arrondissement = arrondissements.find(
-    (a) => a.name === arrondissementName
-  );
+  const arrondissement = arrondissements.find((a) => a.name === arrondissementName);
   if (arrondissement) {
     activeInsee.value = arrondissement.insee;
   } else {
@@ -66,7 +60,7 @@ const getArrondissementName = (insee: string): string => {
 </script>
 
 <template>
-  <main class="bg-gradient-to-br from-green-50 to-green-100 pb-4 h-screen">
+  <main class="bg-gradient-to-br from-green-50 to-green-100 pb-4">
     <section>
       <Navbar
         logoSrc="/leaf.svg"
@@ -98,7 +92,7 @@ const getArrondissementName = (insee: string): string => {
     <section class="flex py-4 px-4 gap-8">
       <div class="h-[430px] min-w-1/2">
         <MapParis
-          :selectedArrondissement="selectedArrondissement"
+          :center="getArrondissementCoordinates(activeInsee) || [48.8566, 2.3522]"
           class="border-2 border-green-500"
           @arrondissement-selected="onArrondissementSelected"
         />
@@ -111,20 +105,20 @@ const getArrondissementName = (insee: string): string => {
           :data="airQualityIndices"
           :show-tomorrow="false"
           :show-map="true"
-          :center="getArrondissementCoordinates(selectedArrondissement)"
-          :selectedArrondissement="
-            getArrondissementName(selectedArrondissement)
-          "
+          :center="getArrondissementCoordinates(activeInsee)"
+          :selectedArrondissement="getArrondissementName(activeInsee)"
         />
         <h2 class="pt-4 text-3xl font-semibold text-green-800">
-          Le Top des arrondissements indiquants<br />
+          Le Top des arrondissements indiquant<br />
           la meilleure qualité de l'air
         </h2>
       </div>
     </section>
 
     <section class="flex gap-10 px-4">
-      <div class="w-1/2"><EcoFacts /></div>
+      <div class="w-1/2">
+        <EcoFacts />
+      </div>
       <div class="flex w-1/2 justify-center items-center text-center">
         <ChartBar
           v-if="airQualityIndices"
