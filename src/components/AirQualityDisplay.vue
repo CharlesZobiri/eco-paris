@@ -161,10 +161,7 @@ watch(
       </section>
 
       <section v-if="showMap" class="w-full">
-        <div
-          class="mt-6 rounded-xl overflow-hidden border border-green-500"
-          style="height: 250px"
-        >
+        <div class="rounded-xl overflow-hidden border border-green-500 h-full">
           <LMap
             :center="center || [dayData.lat || 48.8566, dayData.lng || 2.3522]"
             :zoom="zoom"
