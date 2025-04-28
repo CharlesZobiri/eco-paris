@@ -12,7 +12,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Navbar from "@/components/home/Navbar.vue";
+import Navbar from "@/components/home/navbar.vue";
+import Footer from "@/components/home/Footer.vue";
 
 const firstArrondissement = ref("75101");
 const secondArrondissement = ref("75115");
@@ -76,7 +77,7 @@ onMounted(fetchAirQualityData);
 </script>
 
 <template>
-  <section
+  <div
     class="relative flex flex-col items-center gap-8 bg-gradient-to-br from-green-50 to-green-100 min-h-screen"
   >
     <Navbar
@@ -94,7 +95,7 @@ onMounted(fetchAirQualityData);
 
     <Loader :isLoading="isLoading" />
 
-    <div
+    <section
       v-if="!isLoading"
       class="w-full max-w-4xl bg-white rounded-2xl p-8 shadow-xl border border-green-300"
     >
@@ -164,17 +165,17 @@ onMounted(fetchAirQualityData);
           </Select>
         </div>
       </div>
-    </div>
+    </section>
 
-    <div
+    <section
       v-if="!isLoading && isTomorrowDataMissing"
       class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
     >
       ℹ️ Les prévisions pour le <strong>lendemain</strong> ne sont pas encore
       disponibles.
-    </div>
+    </section>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full px-8 pb-4">
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-16 w-full px-8 pb-4">
       <div class="space-y-8">
         <h2
           class="text-3xl font-bold text-green-700 bg-green-100 p-6 rounded-xl text-center shadow-xl mb-2"
@@ -208,6 +209,8 @@ onMounted(fetchAirQualityData);
         />
         <p v-else class="text-gray-600 text-center">Aucune donnée disponible</p>
       </div>
-    </div>
-  </section>
+    </section>
+
+    <Footer />
+  </div>
 </template>

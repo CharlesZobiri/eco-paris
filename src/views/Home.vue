@@ -12,6 +12,7 @@ import { onMounted, computed, watch } from "vue";
 import Loader from "@/components/Loader.vue";
 import { arrondissements } from "@/data/arrondissements";
 import EcoFacts from "@/components/EcoFacts.vue";
+import Footer from "@/components/home/Footer.vue";
 
 const isLoading = ref(false);
 
@@ -65,8 +66,8 @@ const getArrondissementName = (insee: string): string => {
 </script>
 
 <template>
-  <div class="bg-gradient-to-br from-green-50 to-green-200 pb-4 h-screen">
-    <div>
+  <main class="bg-gradient-to-br from-green-50 to-green-100 pb-4 h-screen">
+    <section>
       <Navbar
         logoSrc="/leaf.svg"
         title="Eco-Paris - Tableau de bord"
@@ -85,14 +86,14 @@ const getArrondissementName = (insee: string): string => {
           },
         ]"
       />
-    </div>
+    </section>
 
-    <div>
+    <section>
       <Day
         :selectedArrondissement="selectedArrondissement"
         @arrondissement-selected="onArrondissementSelected"
       />
-    </div>
+    </section>
 
     <section class="flex py-4 px-4 gap-8">
       <div class="h-[430px] min-w-1/2">
@@ -132,5 +133,6 @@ const getArrondissementName = (insee: string): string => {
         />
       </div>
     </section>
-  </div>
+    <Footer />
+  </main>
 </template>

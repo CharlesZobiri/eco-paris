@@ -21,7 +21,7 @@ const navigate = (path: string) => {
 </script>
 
 <template>
-  <div
+  <nav
     class="flex justify-between w-full px-6 py-4 border-b-2"
     :class="titleColor ?? 'bg-green-100'"
   >
@@ -44,5 +44,5 @@ const navigate = (path: string) => {
         <component :is="button.icon" />{{ button.label }}
       </button>
     </div>
-  </div>
+  </nav>
 </template>

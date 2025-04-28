@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full flex flex-col justify-between p-4 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl space-y-4 animate-fade-in"
+    class="w-full h-full flex flex-col justify-between p-4 rounded-2xl space-y-4 animate-fade-in"
   >
     <div>
       <h2

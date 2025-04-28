@@ -44,7 +44,7 @@ function goToHome() {
         <LandingCard
           class="w-1/3"
           name="Qualité de l'air"
-          description="Prennez connaissance de la qualité de l'air en temps réel de votre arrondissement."
+          description="Consulter les prévisions de qualité de l'air pour chaque arrondissement de Paris."
           icon="Wind"
         />
 
