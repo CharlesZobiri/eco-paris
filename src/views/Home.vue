@@ -31,19 +31,6 @@ const airQualityIndices = computed(() => {
   return airQualityData.value[activeInsee.value];
 });
 
-const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
-const tomorrowKey = tomorrow.toISOString().split("T")[0]; // format "YYYY-MM-DD"
-
-const isTomorrowDataMissing = computed(() => {
-  const hasTomorrowData = (data: any[]) => {
-    if (!data || !Array.isArray(data)) return false;
-    return data.some((item) => item.date === tomorrowKey);
-  };
-  return !hasTomorrowData(airQualityIndices.value);
-});
-
 const fetchAirQualityData = async () => {
   isLoading.value = true;
   try {
@@ -116,14 +103,6 @@ const getArrondissementName = (insee: string): string => {
         />
       </div>
       <div class="w-full">
-        <div
-          v-if="!isLoading && isTomorrowDataMissing"
-          class="bg-yellow-100 text-yellow-800 px-4 py-3 rounded-xl shadow-md text-center"
-        >
-          ℹ️ Les prévisions pour le <strong>lendemain</strong> ne sont pas
-          encore disponibles.
-        </div>
-
         <Loader :isLoading="isLoading" />
         <AirQualityDisplay
           class="w-full"

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full flex flex-col justify-between p-8 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl space-y-4 animate-fade-in"
+    class="w-full h-full flex flex-col justify-between p-4 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl space-y-4 animate-fade-in"
   >
     <div>
       <h2
@@ -14,16 +14,22 @@
         {{ currentFact.fact }}
       </h3>
 
-      <p class="max-w-[90%] text-green-600 text-base leading-relaxed">
+      <p
+        class="text-green-600 text-base leading-relaxed mx-auto text-center max-w-3xl"
+      >
         {{ currentFact.detail }}
       </p>
     </div>
     <div class="flex justify-center mt-8">
       <button
         @click="getRandomFact"
-        class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-md hover:scale-105 active:scale-95 transition transform duration-300"
+        class="group flex gap-2 justify-center items-center text-center min-w-56 py-2 rounded-m bg-green-500 text-white focus:outline-none"
       >
-        🔄 Nouveau fait
+        <RefreshCcw
+          :class="isLoading ? 'animate-spin' : ''"
+          class="duration-300"
+        />
+        Nouveau fait
       </button>
     </div>
   </div>
@@ -31,6 +37,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import { RefreshCcw } from "lucide-vue-next";
 
 interface EcoFact {
   fact: string;
@@ -163,8 +170,17 @@ function getRandomFactValue() {
   return ecoFacts[randomIndex];
 }
 
-function getRandomFact() {
-  currentFact.value = getRandomFactValue();
+const isLoading = ref(false);
+
+async function getRandomFact() {
+  isLoading.value = true;
+  try {
+    currentFact.value = getRandomFactValue();
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  } finally {
+    isLoading.value = false;
+  }
 }
 </script>
 
