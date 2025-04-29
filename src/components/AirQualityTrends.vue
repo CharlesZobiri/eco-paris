@@ -34,43 +34,43 @@ const chartData = computed(() => {
     datasets: [
       {
         label: "Bonne",
-        backgroundColor: "#A7F3D0",
-        borderColor: "#34D399",
+        backgroundColor: "#A7F3D0", // Light green
+        borderColor: "#34D399", // Green
         data: airQualityData.value.map((data) => data.goodDays),
         stack: "Stack 0",
       },
       {
         label: "Moyenne",
-        backgroundColor: "#FEF08A",
-        borderColor: "#FACC15",
+        backgroundColor: "#FEF08A", // Light yellow
+        borderColor: "#FACC15", // Yellow
         data: airQualityData.value.map((data) => data.averageDays),
         stack: "Stack 0",
       },
       {
         label: "Dégradée",
-        backgroundColor: "#FCD34D",
-        borderColor: "#F59E0B",
+        backgroundColor: "#FCD34D", // Yellow
+        borderColor: "#F59E0B", // Dark yellow
         data: airQualityData.value.map((data) => data.degradedDays),
         stack: "Stack 0",
       },
       {
         label: "Mauvaise",
-        backgroundColor: "#FCA5A5",
-        borderColor: "#EF4444",
+        backgroundColor: "#FCA5A5", // Light orange
+        borderColor: "#EF4444", // Red
         data: airQualityData.value.map((data) => data.badDays),
         stack: "Stack 0",
       },
       {
         label: "Très mauvaise",
-        backgroundColor: "#C4B5FD",
-        borderColor: "#8B5CF6",
+        backgroundColor: "#F9A8D4", // Pink
+        borderColor: "#EC4899", // Pink
         data: airQualityData.value.map((data) => data.veryBadDays),
         stack: "Stack 0",
       },
       {
         label: "Extrêmement mauvaise",
-        backgroundColor: "#F9A8D4",
-        borderColor: "#EC4899",
+        backgroundColor: "#C4B5FD", // Purple
+        borderColor: "#8B5CF6", // Purple
         data: airQualityData.value.map((data) => data.extremelyBadDays),
         stack: "Stack 0",
       },
@@ -197,9 +197,10 @@ const chartOptions = {
           <td class="border border-green-500 px-4 py-2 bg-orange-200">
             {{ data.badDays }}
           </td>
-          <td class="border border-green-500 px-4 py-2 bg-red-200">
+          <td class="border border-green-500 px-4 py-2 bg-pink-100">
             {{ data.veryBadDays }}
           </td>
+          <!-- Updated -->
           <td class="border border-green-500 px-4 py-2 bg-purple-200">
             {{ data.extremelyBadDays }}
           </td>
@@ -258,11 +259,11 @@ td {
   background-color: #fcd34d; /* Light orange for "bad" days */
 }
 
-.bg-red-200 {
-  background-color: #fca5a5; /* Light red for "very bad" days */
+.bg-pink-100 {
+  background-color: #f9a8d4; /* Pink for "Très mauvaise" */
 }
 
 .bg-purple-200 {
-  background-color: #c4b5fd; /* Light purple for "extremely bad" days */
+  background-color: #c4b5fd; /* Purple for "Extrêmement mauvaise" */
 }
 </style>
