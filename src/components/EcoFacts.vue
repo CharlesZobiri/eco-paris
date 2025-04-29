@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-full flex flex-col justify-between p-4 rounded-2xl space-y-4 animate-fade-in"
+    class="w-full flex flex-col justify-between p-4 rounded-2xl space-y-4 animate-fade-in"
   >
     <div>
       <h2
@@ -9,7 +9,7 @@
         🌍 Le saviez-vous ?
       </h2>
       <h3
-        class="text-2xl font-semibold text-green-700 mb-4 text-center mx-auto max-w-xl"
+        class="text-2xl font-semibold text-green-700 mb-4 text-center mx-auto max-w-2xl"
       >
         {{ currentFact.fact }}
       </h3>
@@ -20,7 +20,7 @@
         {{ currentFact.detail }}
       </p>
     </div>
-    <div class="flex justify-center mt-8">
+    <div class="flex justify-center mt-6">
       <button
         @click="getRandomFact"
         class="group flex gap-2 justify-center items-center text-center min-w-56 py-2 rounded-m bg-green-500 text-white focus:outline-none"

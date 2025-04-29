@@ -34,43 +34,43 @@ const chartData = computed(() => {
     datasets: [
       {
         label: "Bonne",
-        backgroundColor: "#A7F3D0", // Light green
-        borderColor: "#34D399", // Green
+        backgroundColor: "#A7F3D0",
+        borderColor: "#34D399",
         data: airQualityData.value.map((data) => data.goodDays),
         stack: "Stack 0",
       },
       {
         label: "Moyenne",
-        backgroundColor: "#FEF08A", // Light yellow
-        borderColor: "#FACC15", // Yellow
+        backgroundColor: "#FEF08A",
+        borderColor: "#FACC15",
         data: airQualityData.value.map((data) => data.averageDays),
         stack: "Stack 0",
       },
       {
         label: "Dégradée",
-        backgroundColor: "#FCD34D", // Yellow
-        borderColor: "#F59E0B", // Dark yellow
+        backgroundColor: "#FCD34D",
+        borderColor: "#F59E0B",
         data: airQualityData.value.map((data) => data.degradedDays),
         stack: "Stack 0",
       },
       {
         label: "Mauvaise",
-        backgroundColor: "#FCA5A5", // Light orange
-        borderColor: "#EF4444", // Red
+        backgroundColor: "#FCA5A5",
+        borderColor: "#EF4444",
         data: airQualityData.value.map((data) => data.badDays),
         stack: "Stack 0",
       },
       {
         label: "Très mauvaise",
-        backgroundColor: "#F9A8D4", // Pink
-        borderColor: "#EC4899", // Pink
+        backgroundColor: "#F9A8D4",
+        borderColor: "#EC4899",
         data: airQualityData.value.map((data) => data.veryBadDays),
         stack: "Stack 0",
       },
       {
         label: "Extrêmement mauvaise",
-        backgroundColor: "#C4B5FD", // Purple
-        borderColor: "#8B5CF6", // Purple
+        backgroundColor: "#C4B5FD",
+        borderColor: "#8B5CF6",
         data: airQualityData.value.map((data) => data.extremelyBadDays),
         stack: "Stack 0",
       },
