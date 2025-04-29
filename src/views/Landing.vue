@@ -23,7 +23,7 @@ function goToHome() {
         Eco-Paris - L'incateur écologique <br />de vos arrondissements
       </h1>
       <h2 class="text-2xl text-green-800">
-        Analyse de l'impact écologique de votre arrondissement
+        Analyse de la qualité de l'air de votre arrondissement
       </h2>
       <div class="flex text-xl text-center gap-4 text-white mt-2">
         <button
