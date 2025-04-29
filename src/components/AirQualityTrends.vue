@@ -147,7 +147,8 @@ const chartOptions = {
     class="air-quality-trends max-w-3xl mx-auto flex flex-col items-center justify-center"
   >
     <h2 class="text-3xl max-w-2xl font-bold mb-8 text-center text-green-700">
-      Résumé annuel des indices par jour de la qualité de l'air à Paris
+      Résumé annuel des indices moyens quotidiens de la pollution de l'air à
+      Paris
     </h2>
 
     <table
