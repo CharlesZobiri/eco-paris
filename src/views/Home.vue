@@ -130,7 +130,7 @@ const getArrondissementName = (insee: string): string => {
 .grid-layout {
   display: grid;
   grid-template-columns: 1.5fr 0fr 1.5fr;
-  grid-template-rows: 1.2fr 0.6fr 1.2fr;
+  grid-template-rows: 1fr 0.6fr 1.2fr;
   grid-template-areas:
     "map map card"
     "map map graph"

@@ -9,13 +9,13 @@
         🌍 Le saviez-vous ?
       </h2>
       <h3
-        class="text-2xl font-semibold text-green-700 mb-4 text-center mx-auto max-w-2xl"
+        class="text-2xl font-semibold text-green-700 mb-4 text-center mx-auto max-w-xl"
       >
         {{ currentFact.fact }}
       </h3>
 
       <p
-        class="text-green-600 text-base leading-relaxed mx-auto text-center max-w-3xl"
+        class="text-green-600 text-lg leading-relaxed mx-auto text-center max-w-3xl"
       >
         {{ currentFact.detail }}
       </p>
